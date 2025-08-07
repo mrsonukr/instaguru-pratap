@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AutoSlider.css */
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.6;
+}
+body{
+  background-color: #ffffff;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}
+.gradient-text {
+  background: linear-gradient(270deg, #f43f5e, #3b82f6, #ec4899);
+  background-size: 600% 600%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-fill-color: transparent;
+  animation: gradientAnimation 8s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

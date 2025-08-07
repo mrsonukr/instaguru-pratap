@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Device Battery Status</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+
+  <h1 class="text-2xl font-bold mb-6">Device Battery Status</h1>
+
+  <!-- Cards container -->
+  <div id="cardsContainer" class="grid gap-4"></div>
+
+  <script>
+    const container = document.getElementById("cardsContainer");
+
+    async function loadData() {
+      try {
+        const res = await fetch("https://device-info.mssonukr.workers.dev/");
+        const data = await res.json();
+
+        // Convert object to array
+        const deviceArray = Object.entries(data).map(([ip, info]) => ({
+          ip,
+          ...info
+        }));
+
+        // Sort newest first
+        deviceArray.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        container.innerHTML = "";
+
+        deviceArray.forEach(device => {
+          const locationLink = device.location
+            ? `<a href="https://www.google.com/maps?q=${device.location.latitude},${device.location.longitude}" target="_blank" class="text-blue-500 underline">View on Map</a>`
+            : `<span class="text-gray-400">No location</span>`;
+
+          const card = document.createElement("div");
+          card.className = "bg-white rounded-lg shadow p-4";
+
+          card.innerHTML = `
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-lg font-semibold">Battery: ${device.battery}</p>
+                <p class="text-sm text-gray-600">Charging: 
+                  <span class="${device.charging ? 'text-green-600' : 'text-red-600'} font-semibold">
+                    ${device.charging ? 'Yes' : 'No'}
+                  </span>
+                </p>
+                <p class="text-sm">IP: <span class="font-mono">${device.ip}</span></p>
+                <p class="text-sm">${locationLink}</p>
+              </div>
+              <span class="text-xs text-gray-400">${new Date(device.timestamp).toLocaleString()}</span>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        container.innerHTML = `<p class="text-red-500">Failed to load data.</p>`;
+        console.error(err);
+      }
+    }
+
+    loadData();
+  </script>
+
+</body>
+</html>
