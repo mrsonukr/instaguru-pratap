@@ -10,12 +10,12 @@ const siteConfig = {
 
   // Contact Information
   supportEmail: "help@smmguru.shop",
-  supportPhone: "+91 72259 79671",
-  whatsappNumber: "917225979671",
+  supportPhone: "+917470 729419",
+  whatsappNumber: "917470729419",
 
   // Payment Configuration - Multiple UPI IDs
   upiIds: ["netc.34161FA820328AA2D2560DE0@mairtel"],
-  minimumAmount: 30,
+  minimumAmount: 45,
   maximumAmount: 2500,
 
   // Analytics
