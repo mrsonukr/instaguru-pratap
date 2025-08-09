@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import COLOR_VARIANTS from "../../utils/colorVariants";
+import { useLanguage } from "../../context/LanguageContext";
+import { getTranslation } from "../../data/translations";
 
-const PackFilter = ({ packFilters, onFilterChange, variant = "blue" }) => {
+const PackFilter = ({ packFilters, onFilterChange, variant = "blue", serviceSlug = "" }) => {
+  const { language } = useLanguage();
   const [selected, setSelected] = useState("All");
 
   const handleFilterClick = (filter) => {
@@ -40,7 +43,7 @@ const PackFilter = ({ packFilters, onFilterChange, variant = "blue" }) => {
                 }
               `}
             >
-              {filter}
+              {filter === "All" ? getTranslation('all', language) : getTranslation(`${serviceSlug}.filters.${filter.toLowerCase()}`, language) || filter}
             </button>
           );
         })}

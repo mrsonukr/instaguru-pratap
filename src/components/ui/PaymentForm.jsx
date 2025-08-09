@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import PayInfo from "./PayInfo";
 import { Loader2 } from "lucide-react";
 import siteConfig from "../../config/siteConfig";
+import { useLanguage } from "../../context/LanguageContext";
+import { getTranslation } from "../../data/translations";
 
 export default function PaymentForm() {
+  const { language } = useLanguage();
   const [amount, setAmount] = useState(() => {
     // Check if there's a prefilled amount from service selection
     const prefilledAmount = localStorage.getItem("prefilledAmount");
@@ -113,7 +116,7 @@ export default function PaymentForm() {
         className="bg-green-50 rounded-xl p-6 space-y-4 mx-auto"
       >
         <div>
-          <label className="block font-semibold mb-1">Amount</label>
+          <label className="block font-semibold mb-1">{getTranslation('amount', language)}</label>
           <div className="flex items-center bg-green-100 rounded-md">
             <span className="px-3 text-gray-500">₹</span>
             <input
@@ -121,7 +124,7 @@ export default function PaymentForm() {
               value={amount}
               onChange={handleAmountChange}
               className="w-full p-2 bg-transparent text-black focus:outline-none disabled:opacity-50"
-              placeholder={`Enter amount (${siteConfig.minimumAmount} - ${siteConfig.maximumAmount})`}
+              placeholder={`${getTranslation('enterAmount', language)} (${siteConfig.minimumAmount} - ${siteConfig.maximumAmount})`}
               disabled={isLoading}
             />
           </div>
@@ -135,7 +138,7 @@ export default function PaymentForm() {
           {currentBonus > 0 && (
             <div className="mt-2 p-3 bg-green-100 border border-green-300 rounded-lg">
               <p className="text-sm font-semibold text-green-700">
-                🎁 Add ₹{amount} → Get ₹{currentBonus} Extra Bonus
+                {getTranslation('addAmountGetBonus', language).replace('{amount}', amount).replace('{bonus}', currentBonus)}
               </p>
             </div>
           )}
@@ -157,7 +160,7 @@ export default function PaymentForm() {
 
         {/* Special Offer Buttons */}
         <div className="space-y-2">
-          <p className="text-center text-sm font-semibold text-gray-700">🔥 Special Offers</p>
+          <p className="text-center text-sm font-semibold text-gray-700">{getTranslation('specialOffers', language)}</p>
           <div className="flex justify-center gap-4">
             <button
               type="button"
@@ -165,7 +168,7 @@ export default function PaymentForm() {
               className="px-4 py-2 bg-yellow-100 text-yellow-700 text-sm font-semibold rounded-lg hover:bg-yellow-200 transition disabled:opacity-50"
               disabled={isLoading}
             >
-              Add ₹100+ → Get ₹40 Extra
+              {getTranslation('add100Get40', language)}
             </button>
             <button
               type="button"
@@ -173,7 +176,7 @@ export default function PaymentForm() {
               className="px-4 py-2 bg-yellow-100 text-yellow-700 text-sm font-semibold rounded-lg hover:bg-yellow-200 transition disabled:opacity-50"
               disabled={isLoading}
             >
-              Add ₹250+ → Get ₹110 Extra
+              {getTranslation('add250Get110', language)}
             </button>
           </div>
         </div>
@@ -188,10 +191,10 @@ export default function PaymentForm() {
           {isLoading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              Processing...
+              {getTranslation('processing', language)}
             </>
           ) : (
-            "Proceed to Pay"
+            getTranslation('proceedToPay', language)
           )}
         </button>
         <PayInfo />

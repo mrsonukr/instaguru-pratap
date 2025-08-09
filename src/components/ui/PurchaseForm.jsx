@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import COLOR_VARIANTS from "../../utils/colorVariants";
 import { hasSufficientFunds, calculateWalletBalance } from "../../utils/walletUtils";
 import Popup from "../ui/Popup";
+import { useLanguage } from "../../context/LanguageContext";
+import { getTranslation } from "../../data/translations";
 
 const PurchaseForm = ({
   color = "green",
@@ -10,6 +12,7 @@ const PurchaseForm = ({
   onSubmit,
   packPrice = 0,
 }) => {
+  const { language } = useLanguage();
   const variant = COLOR_VARIANTS[color] || COLOR_VARIANTS.red;
   const [input, setInput] = useState("");
   const [showPopup, setShowPopup] = useState(false);
@@ -24,7 +27,7 @@ const PurchaseForm = ({
     return (
       <div className="text-center p-4">
         <p className="text-red-600 font-semibold">
-          Invalid service data. Please select a valid service.
+          {getTranslation('invalidServiceData', language)}
         </p>
       </div>
     );
@@ -34,6 +37,14 @@ const PurchaseForm = ({
   const filterConfig = config.filters?.[filter] || {
     label: config.label,
     placeholder: config.placeholder,
+  };
+
+  // Get the proper label for this filter
+  const filterLabel = getTranslation(`${config.slug}.label`, language);
+  const translatedFilterConfig = {
+    ...filterConfig,
+    label: filterLabel || config.label,
+    placeholder: config.placeholder // Placeholder is already translated in serviceData
   };
 
   // Get current wallet balance
@@ -71,12 +82,12 @@ const PurchaseForm = ({
             className="w-8 h-8 rounded-full bg-cover"
             alt={`${config.name} icon`}
           />
-          {filterConfig.label}
+          {translatedFilterConfig.label}
         </label>
         <input
           id="profileInput"
           type="text"
-          placeholder={filterConfig.placeholder}
+          placeholder={translatedFilterConfig.placeholder}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           required
@@ -88,7 +99,7 @@ const PurchaseForm = ({
           type="submit"
           className={`text-center text-white w-full px-6 py-2 rounded-full gap-2 ${variant.buttonBg} ${variant.buttonHover}`}
         >
-          Continue
+          {getTranslation('continue', language)}
         </button>
       </form>
       <Popup isVisible={showPopup} onClose={handleClosePopup} requiredAmount={packPrice} />

@@ -4,10 +4,13 @@ import { Link } from "react-router-dom";
 import siteConfig from "../config/siteConfig";
 import { calculateWalletBalance } from "../utils/walletUtils";
 import { clearConsole } from "../utils/consoleUtils";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../data/translations";
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
+  const { language, toggleLanguage, getDefaultLanguage } = useLanguage();
 
   // Update wallet balance when component mounts or when sidebar opens
   useEffect(() => {
@@ -30,6 +33,10 @@ const Header = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const toggleSwitch = () => {
+    toggleLanguage();
+  };
+
   return (
     <>
       {/* Header with Logo and Menu Icon */}
@@ -43,11 +50,36 @@ const Header = () => {
             />
           </Link>
         </div>
-        <div
-          className="menu-icon cursor-pointer p-2 rounded-full hover:bg-green-200 transition-colors duration-200"
-          onClick={toggleSidebar}
-        >
-          <FiMenu className="h-6 w-6" />
+        
+        {/* Switch and Menu Icon Container */}
+        <div className="flex items-center gap-3">
+          {/* Switch */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-700">
+              {language === 'hi' ? "हिंदी" : "ENG"}
+            </span>
+            <button
+              onClick={toggleSwitch}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
+                language === 'hi' ? 'bg-green-600' : 'bg-gray-200'
+              }`}
+              title={`Current: ${language === 'hi' ? 'Hindi' : 'English'} | Default: ${getDefaultLanguage() === 'hi' ? 'Hindi' : 'English'}`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
+                  language === 'hi' ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+          
+          {/* Menu Icon */}
+          <div
+            className="menu-icon cursor-pointer p-2 rounded-full hover:bg-green-200 transition-colors duration-200"
+            onClick={toggleSidebar}
+          >
+            <FiMenu className="h-6 w-6" />
+          </div>
         </div>
       </header>
 
@@ -77,7 +109,7 @@ const Header = () => {
               className="flex items-center p-4 border-b border-gray-200 hover:bg-green-50 transition-colors duration-200 gap-3 text-gray-800 font-medium no-underline"
             >
               <FiHome className="w-6 h-6 text-green-500" />
-              Home
+              {getTranslation('home', language)}
             </Link>
           </li>
           <li>
@@ -86,7 +118,7 @@ const Header = () => {
               className="flex items-center p-4 border-b border-gray-200 hover:bg-green-50 transition-colors duration-200 gap-3 text-gray-800 font-medium no-underline"
             >
               <FiCreditCard className="w-6 h-6 text-green-500" />
-              Wallet: ₹{walletBalance.toFixed(2)}
+              {getTranslation('wallet', language)}: ₹{walletBalance.toFixed(2)}
             </Link>
           </li>
           <li>
@@ -95,7 +127,7 @@ const Header = () => {
               className="flex items-center p-4 border-b border-gray-200 hover:bg-green-50 transition-colors duration-200 gap-3 text-gray-800 font-medium no-underline"
             >
               <FiPackage className="w-6 h-6 text-green-500" />
-              My Orders
+              {getTranslation('myOrders', language)}
             </Link>
           </li>
           <li>
@@ -104,7 +136,7 @@ const Header = () => {
               className="flex items-center p-4 border-b border-gray-200 hover:bg-green-50 transition-colors duration-200 gap-3 text-gray-800 font-medium no-underline"
             >
               <FiShare2 className="w-6 h-6 text-green-500" />
-              Refer
+              {getTranslation('refer', language)}
             </Link>
           </li>
           <li>
@@ -114,7 +146,7 @@ const Header = () => {
               className="flex items-center p-4 border-b border-gray-200 hover:bg-green-50 transition-colors duration-200 gap-3 text-gray-800 font-medium no-underline"
             >
               <FiPhone className="w-6 h-6 text-green-500" />
-              Contact Us
+              {getTranslation('contactUs', language)}
             </Link>
           </li>
           <li>
@@ -123,7 +155,7 @@ const Header = () => {
               className="flex items-center p-4 border-b border-gray-200 hover:bg-green-50 transition-colors duration-200 gap-3 text-gray-800 font-medium no-underline"
             >
               <FiInfo className="w-6 h-6 text-green-500" />
-              About
+              {getTranslation('about', language)}
             </Link>
           </li>
         </ul>

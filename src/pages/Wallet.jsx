@@ -4,10 +4,13 @@ import { PlusCircleIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Clock, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import Header from "../components/Header";
 import { calculateWalletBalance, getWalletSummary } from "../utils/walletUtils";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../data/translations";
 
 const Wallet = () => {
   const [transactions, setTransactions] = useState([]);
   const [walletSummary, setWalletSummary] = useState(null);
+  const { language } = useLanguage();
 
   // Use the utility function to calculate wallet balance
   const walletAmount = calculateWalletBalance();
@@ -194,12 +197,12 @@ const Wallet = () => {
       };
       
       const statusLabels = {
-        initiated: "Pending",
-        cancelled: "Cancelled",
-        expired: "Expired",
-        processing: "Processing",
-        failed: "Failed",
-        completed: "Completed"
+        initiated: getTranslation('pending', language),
+        cancelled: getTranslation('cancelled', language),
+        expired: getTranslation('expired', language),
+        processing: getTranslation('processing', language),
+        failed: getTranslation('failed', language),
+        completed: getTranslation('completed', language)
       };
 
       return (
@@ -214,13 +217,13 @@ const Wallet = () => {
   // Professional transaction description formatting
   const getTransactionDescription = (txn) => {
     if (txn.type === "payment_initiated") {
-      return "Payment Request";
+      return getTranslation('paymentRequest', language);
     } else if (txn.type === "credit") {
-      return txn.description || "Credit";
+      return txn.description || getTranslation('credit', language);
     } else if (txn.type === "debit") {
-      return txn.description || "Debit";
+      return txn.description || getTranslation('debit', language);
     }
-    return txn.description || "Transaction";
+    return txn.description || getTranslation('transaction', language);
   };
 
   return (
@@ -231,7 +234,7 @@ const Wallet = () => {
         <div className="bg-green-50 rounded-xl p-6 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-green-700 mb-2">Wallet</h2>
+              <h2 className="text-xl font-bold text-green-700 mb-2">{getTranslation('wallet', language)}</h2>
               <p className="text-3xl font-bold text-gray-800">
                 ₹{walletAmount.toFixed(2)}
               </p>
@@ -244,18 +247,18 @@ const Wallet = () => {
               to="/addfund"
               className="inline-flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition"
             >
-              <PlusCircleIcon className="w-5 h-5" /> Add Funds
+              <PlusCircleIcon className="w-5 h-5" /> {getTranslation('addFunds', language)}
             </Link>
           </div>
         </div>
 
         <div className="bg-green-50 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-green-700 mb-4">
-            Transaction History
+            {getTranslation('transactionHistory', language)}
           </h3>
           <ul className="space-y-4">
             {transactions.length === 0 ? (
-              <li className="text-gray-500">No transactions yet.</li>
+              <li className="text-gray-500">{getTranslation('noTransactionsYet', language)}</li>
             ) : (
               transactions.map((txn) => (
                 <li

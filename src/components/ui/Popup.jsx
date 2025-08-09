@@ -2,9 +2,12 @@ import { X, AlertTriangle, CreditCard } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import siteConfig from "../../config/siteConfig";
 import { calculateWalletBalance } from "../../utils/walletUtils";
+import { useLanguage } from "../../context/LanguageContext";
+import { getTranslation } from "../../data/translations";
 
 const Popup = ({ isVisible, onClose, requiredAmount = 0 }) => {
   const navigate = useNavigate();
+  const { language } = useLanguage();
   
   // Get actual wallet balance
   const currentBalance = calculateWalletBalance();
@@ -37,24 +40,24 @@ const Popup = ({ isVisible, onClose, requiredAmount = 0 }) => {
               <AlertTriangle className="text-red-600 mx-auto" />
             </div>
             <h3 className="text-2xl text-red-600 font-bold text-center mt-4">
-              Insufficient Balance
+              {getTranslation('insufficientBalance', language)}
             </h3>
             <p className="text-lg mt-2 text-center text-gray-700">
-              Your balance is currently{" "}
+              {getTranslation('yourBalanceIs', language)}{" "}
               <strong className="text-green-500">₹{currentBalance}</strong>.
             </p>
             <p className="text-sm mt-2 text-center text-gray-400">
-              आपके पास पर्याप्त शेष नहीं है। कृपया पहले फंड जोड़ें।
+              {getTranslation('insufficientBalanceMessage', language)}
             </p>
             <button
               onClick={handleAddFunds}
               className="mt-4 text-white bg-green-500 hover:bg-green-600 py-2 px-4 rounded-lg mx-auto block text-center"
             >
-              <CreditCard className="inline mr-2" /> Add Funds / फंड जोड़ें
+              <CreditCard className="inline mr-2" /> {getTranslation('addFunds', language)}
             </button>
             <Link to="/refer" className="text-center">
               <p className="text-green-600 mt-3 text-sm font-semibold">
-                🤑 Refer & Earn! Click Here
+                {getTranslation('referAndEarn', language)}
               </p>
             </Link>
           </div>

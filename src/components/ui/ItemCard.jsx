@@ -5,8 +5,11 @@ import { PhotoIcon } from "@heroicons/react/24/outline";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import COLOR_VARIANTS from "../../utils/colorVariants";
 import Skeleton from "./Skeleton";
+import { useLanguage } from "../../context/LanguageContext";
+import { getTranslation } from "../../data/translations";
 
 const ItemCard = ({ logo, name, description, slug, color = "red" }) => {
+  const { language } = useLanguage();
   const variant = COLOR_VARIANTS[color] || COLOR_VARIANTS.red;
   const [imgError, setImgError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -43,7 +46,7 @@ const ItemCard = ({ logo, name, description, slug, color = "red" }) => {
       <div
         className={`ml-4 flex-shrink-0 text-white text-sm px-4 py-2 rounded-full flex items-center gap-1 ${variant.buttonBg} ${variant.buttonHover}`}
       >
-        Plans
+        {getTranslation('plans', language)}
         <ArrowRightIcon className="w-4 h-4" />
       </div>
     </Link>

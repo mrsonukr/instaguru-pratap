@@ -10,12 +10,12 @@ const siteConfig = {
 
   // Contact Information
   supportEmail: "help@smmguru.shop",
-  supportPhone: "+917470 729419",
-  whatsappNumber: "917470729419",
+  supportPhone: "+91 72259 79671",
+  whatsappNumber: "917225979671",
 
   // Payment Configuration - Multiple UPI IDs
   upiIds: ["netc.34161FA820328AA2D2560DE0@mairtel"],
-  minimumAmount: 45,
+  minimumAmount: 30,
   maximumAmount: 2500,
 
   // Analytics
@@ -25,20 +25,27 @@ const siteConfig = {
   banners: [
     {
       id: 1,
+      src: "/banner/banner0.webp",
+      alt: "Banner 0",
+      width: 1000,
+      height: 367,
+    },
+    {
+      id: 2,
       src: "/banner/banner1.webp",
       alt: "Banner 1",
       width: 1000,
       height: 367,
     },
     {
-      id: 2,
+      id: 3,
       src: "/banner/banner2.webp",
       alt: "Banner 2",
       width: 1000,
       height: 367,
     },
     {
-      id: 3,
+      id: 4,
       src: "/banner/banner3.webp",
       alt: "Banner 3",
       width: 1000,

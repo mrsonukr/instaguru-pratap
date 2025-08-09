@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { ThreeDot } from "react-loading-indicators";
 import Skeleton from "../ui/Skeleton";
@@ -13,6 +13,7 @@ const PaymentPopup = ({
   onClose,
 }) => {
   const [loadedImages, setLoadedImages] = useState({});
+  const [showAppNotInstalled, setShowAppNotInstalled] = useState(false);
 
   const handleClose = () => {
     // Clear browser console
@@ -42,6 +43,22 @@ const PaymentPopup = ({
   const handleImageLoad = (imageName) => {
     setLoadedImages((prev) => ({ ...prev, [imageName]: true }));
   };
+
+  // Effect to show "app not installed" message after 3 seconds
+  useEffect(() => {
+    if (showPopup && selectedPaymentMethod !== "qrcode") {
+      const timer = setTimeout(() => {
+        setShowAppNotInstalled(true);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+        setShowAppNotInstalled(false);
+      };
+    } else {
+      setShowAppNotInstalled(false);
+    }
+  }, [showPopup, selectedPaymentMethod]);
 
   const PaymentIcon = ({ src, alt, className, imageName }) => (
     <div className="relative inline-block">
@@ -140,19 +157,36 @@ const PaymentPopup = ({
               </div>
               <h4 className="text-lg font-semibold mb-2">Processing Payment</h4>
               <p className="text-gray-600 mb-4">
-                Redirecting to{" "}
-                {selectedPaymentMethod === "paytm"
-                  ? "PayTM"
-                  : selectedPaymentMethod === "phonepe"
-                  ? "PhonePe"
-                  : selectedPaymentMethod === "gpay"
-                  ? "Google Pay"
-                  : "UPI"}{" "}
-                app...
+                {showAppNotInstalled ? (
+                  <>
+                    Unable to open{" "}
+                    {selectedPaymentMethod === "paytm"
+                      ? "PayTM"
+                      : selectedPaymentMethod === "phonepe"
+                      ? "PhonePe"
+                      : selectedPaymentMethod === "gpay"
+                      ? "Google Pay"
+                      : "UPI"}{" "}
+                   
+                  </>
+                ) : (
+                  <>
+                    Redirecting to{" "}
+                    {selectedPaymentMethod === "paytm"
+                      ? "PayTM"
+                      : selectedPaymentMethod === "phonepe"
+                      ? "PhonePe"
+                      : selectedPaymentMethod === "gpay"
+                      ? "Google Pay"
+                      : "UPI"}{" "}
+                    app...
+                  </>
+                )}
               </p>
               <p className="text-sm text-gray-500">
-                If the app doesn't open automatically, please check your
-                installed apps.
+                {showAppNotInstalled
+                  ? "You can select a different payment method from the options above."
+                  : "If the app doesn't open automatically, please check your installed apps."}
               </p>
             </div>
           )}

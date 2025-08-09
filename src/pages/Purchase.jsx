@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
@@ -7,13 +7,19 @@ import PurchaseForm from "../components/ui/PurchaseForm";
 import servicesData from "../data/categories.json";
 import { updatePageSEO } from "../utils/seoUtils";
 import COLOR_VARIANTS from "../utils/colorVariants";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../data/translations";
+import { translateCategories, translatePackTitle, translatePackDescription } from "../utils/translationUtils";
 
 const Purchase = () => {
   const { id } = useParams();
-  const pack = servicesData
+  const { language } = useLanguage();
+  const [translatedServicesData, setTranslatedServicesData] = useState(servicesData);
+  
+  const pack = translatedServicesData
     .flatMap((service) => service.packs)
     .find((p) => p.id === parseInt(id));
-  const service = servicesData.find((s) =>
+  const service = translatedServicesData.find((s) =>
     s.packs.some((p) => p.id === parseInt(id))
   );
 
@@ -24,13 +30,19 @@ const Purchase = () => {
     }
   }, [pack, service]);
 
+  // Translate services data when language changes
+  useEffect(() => {
+    const translated = translateCategories(servicesData, language);
+    setTranslatedServicesData(translated);
+  }, [language]);
+
   const benefits = [
-    { id: 1, message: "High-Quality Real Followers" },
-    { id: 2, message: "Fast Delivery Guaranteed" },
-    { id: 3, message: "Safe & Secure Service" },
-    { id: 4, message: "24/7 Customer Support" },
-    { id: 5, message: "No Password Required" },
-    { id: 6, message: "100% Satisfaction Guarantee" },
+    { id: 1, message: getTranslation('highQualityFollowers', language) },
+    { id: 2, message: getTranslation('fastDeliveryGuaranteed', language) },
+    { id: 3, message: getTranslation('safeSecureService', language) },
+    { id: 4, message: getTranslation('customerSupport247', language) },
+    { id: 5, message: getTranslation('noPasswordRequired', language) },
+    { id: 6, message: getTranslation('satisfactionGuarantee', language) },
   ];
 
   if (!pack || !service) {
@@ -38,7 +50,7 @@ const Purchase = () => {
       <div>
         <Header />
         <div className="mt-20 m-4 text-center">
-          <p className="text-lg font-semibold text-gray-800">Pack not found</p>
+          <p className="text-lg font-semibold text-gray-800">{getTranslation('packNotFound', language)}</p>
         </div>
       </div>
     );
@@ -63,11 +75,11 @@ const Purchase = () => {
           </div>
           <div className="flex flex-col flex-grow pl-4 pr-4 min-w-0">
             <h3 className="text-sm font-semibold text-gray-800 truncate">
-              {pack.title}
+              {translatePackTitle(pack.title, language)}
             </h3>
-            <p className="text-xs text-gray-600 mt-1 truncate">{pack.description}</p>
+            <p className="text-xs text-gray-600 mt-1 truncate">{translatePackDescription(pack.description, language)}</p>
             <p className="text-xs text-gray-500 mt-1">
-              {service.name} • {pack.filter}
+              {service.name} • {getTranslation(`${service.slug}.filters.${pack.filter.toLowerCase()}`, language)}
             </p>
           </div>
           <div
@@ -98,7 +110,7 @@ const Purchase = () => {
       <div>
         <div className="text-center mt-6">
           <p className="text-lg font-semibold mt-4 mb-2 gradient-text">
-            How to Use
+            {getTranslation('howToUse', language)}
           </p>
         </div>
         <div className="m-4 rounded-2xl overflow-hidden aspect-video">

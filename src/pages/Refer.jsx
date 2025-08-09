@@ -11,10 +11,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import siteConfig from "../config/siteConfig";
 import { updatePageSEO } from "../utils/seoUtils";
+import { useLanguage } from "../context/LanguageContext";
+import { getTranslation } from "../data/translations";
 
 const Refer = () => {
   const { referralId } = useParams(); // Extract referral ID from URL (e.g., JW2-TLZ-0VT)
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const [referralCode, setReferralCode] = useState("");
   const [copied, setCopied] = useState(false);
   const [referralCount] = useState(0); // Default to 0 referrals
@@ -94,10 +97,10 @@ ${referralLink}`;
       <div className="flex mt-20 items-center justify-center px-4">
         <div className="bg-green-50 rounded-lg p-5 w-full">
           <h2 className="text-xl font-bold text-green-700 mb-3 text-center">
-            Refer & Earn
+            {getTranslation('referAndEarn', language)}
           </h2>
           <p className="text-sm text-gray-700 mb-4 text-center">
-            Share your referral link and earn{" "}
+            {getTranslation('shareReferralMessage', language)}{" "}
             <span className="text-green-600 font-semibold">₹{siteConfig.referralBonus}</span>!
           </p>
 
@@ -126,7 +129,7 @@ ${referralLink}`;
             </button>
           </div>
           <p className="text-xs text-center text-gray-500 mt-2 mb-6">
-            Share this link with your friends to earn rewards.
+            {getTranslation('shareLinkMessage', language)}
           </p>
 
           {/* Referral Count Section */}
@@ -138,7 +141,7 @@ ${referralLink}`;
                 className="text-green-600"
               />
               <p className="text-sm text-gray-700">
-                Your Referrals:{" "}
+                {getTranslation('yourReferrals', language)}:{" "}
                 <span className="font-semibold">{referralCount}</span>
               </p>
             </div>
@@ -147,13 +150,13 @@ ${referralLink}`;
           {/* Instructions Section */}
           <div className="mt-6 border-t border-gray-200 pt-4">
             <h3 className="text-base font-semibold text-green-700 mb-2 text-center">
-              How It Works
+              {getTranslation('howItWorks', language)}
             </h3>
             <ul className="text-sm text-gray-600 list-disc list-inside space-y-2">
-              <li>Share your referral link via Copy, WhatsApp, or SMS.</li>
-              <li>Your friends join using your referral link.</li>
-              <li>Earn ₹{siteConfig.referralBonus} for each friend who signs up successfully.</li>
-              <li>Track your referrals above and watch your rewards grow!</li>
+              <li>{getTranslation('howItWorksStep1', language)}</li>
+              <li>{getTranslation('howItWorksStep2', language)}</li>
+              <li>{getTranslation('howItWorksStep3', language).replace('{amount}', siteConfig.referralBonus)}</li>
+              <li>{getTranslation('howItWorksStep4', language)}</li>
             </ul>
           </div>
         </div>

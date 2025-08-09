@@ -10,14 +10,19 @@ import data from "../data/categories.json";
 import { processServiceAvailability } from "../utils/walletUtils";
 import Footer from "../components/ui/Footer";
 import { updatePageSEO, addStructuredData } from "../utils/seoUtils";
+import { useLanguage } from "../context/LanguageContext";
+import { translateCategories, translatePackTitle, translatePackDescription } from "../utils/translationUtils";
+import { getTranslation } from "../data/translations";
 
 const Products = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const [selectedFilter, setSelectedFilter] = useState("All");
   const [processedServices, setProcessedServices] = useState([]);
+  const [translatedData, setTranslatedData] = useState(data);
 
-  const selectedItem = data.find((item) => item.slug === slug);
+  const selectedItem = translatedData.find((item) => item.slug === slug);
 
   // Redirect to home if service not found
   useEffect(() => {
@@ -44,6 +49,12 @@ const Products = () => {
       setProcessedServices(processed);
     }
   }, [selectedItem]);
+
+  // Translate data when language changes
+  useEffect(() => {
+    const translated = translateCategories(data, language);
+    setTranslatedData(translated);
+  }, [language]);
   if (!selectedItem) {
     return null; // Or a loader if needed
   }
@@ -71,7 +82,7 @@ const Products = () => {
           key={currentService.slug}
           imageSrc={currentService.logo}
           altText={`${currentService.name} logo`}
-          title={`Discover ${currentService.name} Plans`}
+          title={getTranslation('discoverPlans', language).replace('[Service]', currentService.name)}
           description={currentService.description}
           color={currentService.color}
         />
@@ -80,6 +91,7 @@ const Products = () => {
           packFilters={packFilters}
           onFilterChange={setSelectedFilter}
           variant={currentService.color}
+          serviceSlug={currentService.slug}
         />
         <div className="m-4 mt-0 flex flex-col items-center">
           {filteredPacks.length > 0 ? (
@@ -96,16 +108,16 @@ const Products = () => {
               />
             ))
           ) : (
-            <p className="text-gray-600">No plans available for this filter.</p>
+            <p className="text-gray-600">{getTranslation('noPlansAvailable', language)}</p>
           )}
         </div>
         <div className="text-center mt-6 mb-4 ">
           <p className="text-lg font-semibold mt-4 mb-2 gradient-text">
-            Explore our services and their plans.
+            {getTranslation('exploreServices', language)}
           </p>
         </div>
         <div className="flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-hide">
-          {data.map((service) => (
+          {translatedData.map((service) => (
             <Link key={service.slug} to={`/${service.slug}`}>
               <Suggestion
                 logo={service.logo}

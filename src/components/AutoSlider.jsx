@@ -20,14 +20,17 @@ const AutoSlider = () => {
     switch (bannerId) {
       case 1:
         // Banner 1 - Redirect to purchase page
-        navigate("/purchase/11004");
         break;
       case 2:
+        // Banner 1 - Redirect to purchase page
+        navigate("/purchase/11004");
+        break;
+      case 3:
         // Banner 2 - Redirect to add fund with 100rs preselected
         localStorage.setItem("prefilledAmount", "100");
         navigate("/addfund");
         break;
-      case 3:
+      case 4:
         // Banner 3 - Open WhatsApp
         window.open("https://wa.me/917225979671?text=Hello%20SmmGuru", "_blank");
         break;
